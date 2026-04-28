@@ -1,0 +1,81 @@
+{% extends "base.html" %} {% block title %}Заявка на аренду{% endblock %} {%
+block content %}
+<section class="section">
+    <h1>Заявка на аренду №{{ rental_request.id }}</h1>
+
+    <div class="profile-box">
+        <h3>Пользователь</h3>
+        <p><strong>Имя:</strong> {{ rental_request.user.name }}</p>
+        <p><strong>Email:</strong> {{ rental_request.user.email }}</p>
+
+        <h3>Объект аренды</h3>
+        <p>
+            <strong>Название:</strong> {{ rental_request.rental_object.title }}
+        </p>
+        <p>
+            <strong>Адрес:</strong> {{ rental_request.rental_object.address }}
+        </p>
+        <p>
+            <strong>Цена:</strong> {{ rental_request.rental_object.price }} ₽ /
+            месяц
+        </p>
+        <p>
+            <strong>Статус объекта:</strong> {{
+            rental_request.rental_object.status }}
+        </p>
+
+        <h3>Заявка</h3>
+        <p>
+            <strong>Дата создания:</strong> {{
+            rental_request.created_at.strftime("%d.%m.%Y %H:%M") }}
+        </p>
+        <p><strong>Статус заявки:</strong> {{ rental_request.status }}</p>
+        <p>
+            <strong>Комментарий пользователя:</strong> {{ rental_request.message
+            or "—" }}
+        </p>
+        <p>
+            <strong>Комментарий администратора:</strong> {{
+            rental_request.admin_comment or "—" }}
+        </p>
+    </div>
+
+    {% if rental_request.status == "На рассмотрении" %}
+    <div class="request-actions">
+        <form
+            method="POST"
+            action="{{ url_for('requests.approve_request', request_id=rental_request.id) }}"
+            class="form"
+        >
+            <label>Комментарий администратора</label>
+            <textarea
+                name="admin_comment"
+                placeholder="Например: заявка одобрена, свяжитесь с арендодателем"
+            ></textarea>
+            <button type="submit" class="btn">Одобрить заявку</button>
+        </form>
+
+        <form
+            method="POST"
+            action="{{ url_for('requests.reject_request', request_id=rental_request.id) }}"
+            class="form"
+        >
+            <label>Причина отклонения</label>
+            <textarea
+                name="admin_comment"
+                placeholder="Например: объект уже недоступен"
+            ></textarea>
+            <button type="submit" class="btn danger-btn">
+                Отклонить заявку
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="page-actions">
+        <a href="{{ url_for('requests.admin_requests') }}" class="btn secondary"
+            >Назад к заявкам</a
+        >
+    </div>
+</section>
+{% endblock %}

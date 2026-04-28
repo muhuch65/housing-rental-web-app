@@ -1,0 +1,134 @@
+{% extends "base.html" %} {% block title %}Объекты аренды{% endblock %} {% block
+content %}
+<section class="section">
+    <h1>Управление объектами аренды</h1>
+
+    <div class="page-actions">
+        <a href="{{ url_for('housing.admin_housing_create') }}" class="btn"
+            >Добавить объект</a
+        >
+        <a href="{{ url_for('admin.dashboard') }}" class="btn secondary"
+            >Назад в админ-панель</a
+        >
+    </div>
+
+    <form
+        method="GET"
+        action="{{ url_for('housing.admin_housing_list') }}"
+        class="filter-form"
+    >
+        <div class="filter-grid">
+            <div>
+                <label>{{ form.search.label }}</label>
+                {{ form.search(placeholder="Название, адрес или описание") }}
+            </div>
+
+            <div>
+                <label>{{ form.housing_type.label }}</label>
+                {{ form.housing_type() }}
+            </div>
+
+            <div>
+                <label>{{ form.status.label }}</label>
+                {{ form.status() }}
+            </div>
+
+            <div>
+                <label>{{ form.min_price.label }}</label>
+                {{ form.min_price(placeholder="0") }}
+            </div>
+
+            <div>
+                <label>{{ form.max_price.label }}</label>
+                {{ form.max_price(placeholder="100000") }}
+            </div>
+
+            <div>
+                <label>{{ form.rooms.label }}</label>
+                {{ form.rooms() }}
+            </div>
+
+            <div>
+                <label>{{ form.sort.label }}</label>
+                {{ form.sort() }}
+            </div>
+        </div>
+
+        <div class="page-actions">
+            {{ form.submit(class="btn") }}
+            <a
+                href="{{ url_for('housing.admin_housing_list') }}"
+                class="btn secondary"
+                >Сбросить</a
+            >
+        </div>
+    </form>
+
+    <p class="result-count">Найдено объектов: {{ total_count }}</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Адрес</th>
+                <th>Цена</th>
+                <th>Комнат</th>
+                <th>Площадь</th>
+                <th>Тип</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in housing_items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.price }} ₽</td>
+                <td>{{ item.rooms }}</td>
+                <td>{{ item.area }} м²</td>
+                <td>{{ item.housing_type }}</td>
+                <td>
+                    {% if item.status == "Доступно" %}
+                    <span class="status status-success">{{ item.status }}</span>
+                    {% elif item.status == "Занято" %}
+                    <span class="status status-danger">{{ item.status }}</span>
+                    {% else %}
+                    <span class="status status-warning">{{ item.status }}</span>
+                    {% endif %}
+                </td>
+                <td class="table-actions">
+                    <a
+                        href="{{ url_for('housing.admin_housing_detail', housing_id=item.id) }}"
+                        class="btn-table"
+                        >Просмотр</a
+                    >
+                    <a
+                        href="{{ url_for('housing.admin_housing_edit', housing_id=item.id) }}"
+                        class="btn-table"
+                        >Изменить</a
+                    >
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('housing.admin_housing_delete', housing_id=item.id) }}"
+                        class="inline-form"
+                    >
+                        <button type="submit" class="btn-table danger">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="9">Объекты аренды не найдены</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

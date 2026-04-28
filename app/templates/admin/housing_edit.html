@@ -1,0 +1,58 @@
+{% extends "base.html" %} {% block title %}Редактирование объекта{% endblock %}
+{% block content %}
+<section class="form-section">
+    <h1>Редактирование объекта аренды</h1>
+
+    <form method="POST" class="form">
+        {{ form.hidden_tag() }}
+
+        <label>{{ form.title.label }}</label>
+        {{ form.title() }} {% for error in form.title.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+
+        <label>{{ form.address.label }}</label>
+        {{ form.address() }} {% for error in form.address.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+
+        <label>{{ form.price.label }}</label>
+        {{ form.price() }} {% for error in form.price.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+
+        <label>{{ form.rooms.label }}</label>
+        {{ form.rooms() }} {% for error in form.rooms.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+
+        <label>{{ form.area.label }}</label>
+        {{ form.area() }} {% for error in form.area.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+
+        <label>{{ form.housing_type.label }}</label>
+        {{ form.housing_type() }} {% for error in form.housing_type.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+
+        <label>{{ form.status.label }}</label>
+        {{ form.status() }} {% for error in form.status.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+
+        <label>{{ form.description.label }}</label>
+        {{ form.description() }} {% for error in form.description.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %} {{ form.submit(class="btn") }}
+    </form>
+
+    <div class="page-actions">
+        <a
+            href="{{ url_for('housing.admin_housing_detail', housing_id=housing.id) }}"
+            class="btn secondary"
+            >Отмена</a
+        >
+    </div>
+</section>
+{% endblock %}

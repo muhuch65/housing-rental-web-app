@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% block title %}Главная | Аренда жилья{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Система управления арендой жилья</h1>
+    <p>
+        Простое web-приложение для просмотра объектов недвижимости и оформления
+        заявок на аренду.
+    </p>
+    <a href="{{ url_for('housing.housing_list') }}" class="btn"
+        >Перейти в каталог</a
+    >
+</section>
+
+<section class="section">
+    <h2>Доступные объекты</h2>
+
+    <div class="cards">
+        {% for item in housing_items %}
+        <div class="card">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.address }}</p>
+            <p><strong>{{ item.price }} ₽ / месяц</strong></p>
+            <p>Тип: {{ item.housing_type }}</p>
+            <p>Комнат: {{ item.rooms }} | Площадь: {{ item.area }} м²</p>
+            <span class="status status-success">{{ item.status }}</span>
+            <a
+                href="{{ url_for('housing.housing_detail', housing_id=item.id) }}"
+                class="btn-card"
+                >Подробнее</a
+            >
+        </div>
+        {% else %}
+        <p>Доступные объекты пока не добавлены.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

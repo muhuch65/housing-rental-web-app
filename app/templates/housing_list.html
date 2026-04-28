@@ -1,0 +1,88 @@
+{% extends "base.html" %} {% block title %}Каталог жилья{% endblock %} {% block
+content %}
+<section class="section">
+    <h1>Каталог жилья</h1>
+
+    <form
+        method="GET"
+        action="{{ url_for('housing.housing_list') }}"
+        class="filter-form"
+    >
+        <div class="filter-grid">
+            <div>
+                <label>{{ form.search.label }}</label>
+                {{ form.search(placeholder="Название, адрес или описание") }}
+            </div>
+
+            <div>
+                <label>{{ form.housing_type.label }}</label>
+                {{ form.housing_type() }}
+            </div>
+
+            <div>
+                <label>{{ form.status.label }}</label>
+                {{ form.status() }}
+            </div>
+
+            <div>
+                <label>{{ form.min_price.label }}</label>
+                {{ form.min_price(placeholder="0") }}
+            </div>
+
+            <div>
+                <label>{{ form.max_price.label }}</label>
+                {{ form.max_price(placeholder="100000") }}
+            </div>
+
+            <div>
+                <label>{{ form.rooms.label }}</label>
+                {{ form.rooms() }}
+            </div>
+
+            <div>
+                <label>{{ form.sort.label }}</label>
+                {{ form.sort() }}
+            </div>
+        </div>
+
+        <div class="page-actions">
+            {{ form.submit(class="btn") }}
+            <a
+                href="{{ url_for('housing.housing_list') }}"
+                class="btn secondary"
+                >Сбросить</a
+            >
+        </div>
+    </form>
+
+    <p class="result-count">Найдено объектов: {{ total_count }}</p>
+
+    <div class="cards">
+        {% for item in housing_items %}
+        <div class="card">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.address }}</p>
+            <p><strong>{{ item.price }} ₽ / месяц</strong></p>
+            <p>Тип: {{ item.housing_type }}</p>
+            <p>Комнат: {{ item.rooms }} | Площадь: {{ item.area }} м²</p>
+
+            {% if item.status == "Доступно" %}
+            <span class="status status-success">{{ item.status }}</span>
+            {% elif item.status == "Занято" %}
+            <span class="status status-danger">{{ item.status }}</span>
+            {% else %}
+            <span class="status status-warning">{{ item.status }}</span>
+            {% endif %}
+
+            <a
+                href="{{ url_for('housing.housing_detail', housing_id=item.id) }}"
+                class="btn-card"
+                >Подробнее</a
+            >
+        </div>
+        {% else %}
+        <p>По заданным параметрам объекты не найдены.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

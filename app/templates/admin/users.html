@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% block title %}Пользователи{% endblock %} {% block
+content %}
+<section class="section">
+    <h1>Управление пользователями</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    {% if user.is_active_account %}
+                    <span class="status status-success">Активен</span>
+                    {% else %}
+                    <span class="status status-danger">Заблокирован</span>
+                    {% endif %}
+                </td>
+                <td class="table-actions">
+                    <a
+                        href="{{ url_for('users.user_detail', user_id=user.id) }}"
+                        class="btn-table"
+                        >Просмотр</a
+                    >
+                    <a
+                        href="{{ url_for('users.user_edit', user_id=user.id) }}"
+                        class="btn-table"
+                        >Изменить</a
+                    >
+
+                    {% if user.is_active_account %}
+                    <form
+                        method="POST"
+                        action="{{ url_for('users.user_block', user_id=user.id) }}"
+                        class="inline-form"
+                    >
+                        <button type="submit" class="btn-table warning">
+                            Блокировать
+                        </button>
+                    </form>
+                    {% else %}
+                    <form
+                        method="POST"
+                        action="{{ url_for('users.user_unblock', user_id=user.id) }}"
+                        class="inline-form"
+                    >
+                        <button type="submit" class="btn-table">
+                            Разблокировать
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('users.user_delete', user_id=user.id) }}"
+                        class="inline-form"
+                    >
+                        <button type="submit" class="btn-table danger">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">Пользователи не найдены</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

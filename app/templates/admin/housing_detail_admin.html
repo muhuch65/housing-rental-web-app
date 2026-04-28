@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block title %}Объект аренды{% endblock %} {% block
+content %}
+<section class="section">
+    <h1>Информация об объекте аренды</h1>
+
+    <div class="profile-box">
+        <p><strong>ID:</strong> {{ housing.id }}</p>
+        <p><strong>Название:</strong> {{ housing.title }}</p>
+        <p><strong>Адрес:</strong> {{ housing.address }}</p>
+        <p><strong>Стоимость:</strong> {{ housing.price }} ₽ / месяц</p>
+        <p><strong>Количество комнат:</strong> {{ housing.rooms }}</p>
+        <p><strong>Площадь:</strong> {{ housing.area }} м²</p>
+        <p><strong>Тип жилья:</strong> {{ housing.housing_type }}</p>
+        <p><strong>Статус:</strong> {{ housing.status }}</p>
+        <p>
+            <strong>Описание:</strong> {{ housing.description or "Описание
+            отсутствует" }}
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a
+            href="{{ url_for('housing.admin_housing_edit', housing_id=housing.id) }}"
+            class="btn"
+            >Редактировать</a
+        >
+        <a
+            href="{{ url_for('housing.admin_housing_list') }}"
+            class="btn secondary"
+            >Назад к списку</a
+        >
+    </div>
+</section>
+{% endblock %}

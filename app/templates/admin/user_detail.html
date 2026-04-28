@@ -1,0 +1,27 @@
+{% extends "base.html" %} {% block title %}Пользователь{% endblock %} {% block
+content %}
+<section class="section">
+    <h1>Информация о пользователе</h1>
+
+    <div class="profile-box">
+        <p><strong>ID:</strong> {{ user.id }}</p>
+        <p><strong>Имя:</strong> {{ user.name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Роль:</strong> {{ user.role }}</p>
+        <p>
+            <strong>Статус:</strong>
+            {% if user.is_active_account %} Активен {% else %} Заблокирован {%
+            endif %}
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a href="{{ url_for('users.user_edit', user_id=user.id) }}" class="btn"
+            >Редактировать</a
+        >
+        <a href="{{ url_for('users.users_list') }}" class="btn secondary"
+            >Назад к списку</a
+        >
+    </div>
+</section>
+{% endblock %}

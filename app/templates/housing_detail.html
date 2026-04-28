@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block title %}Карточка жилья{% endblock %} {% block
+content %}
+<section class="detail-card">
+    <h1>{{ housing.title }}</h1>
+    <p class="address">{{ housing.address }}</p>
+
+    <div class="detail-grid">
+        <div>
+            <p><strong>Стоимость:</strong> {{ housing.price }} ₽ / месяц</p>
+            <p><strong>Количество комнат:</strong> {{ housing.rooms }}</p>
+            <p><strong>Площадь:</strong> {{ housing.area }} м²</p>
+            <p><strong>Тип жилья:</strong> {{ housing.housing_type }}</p>
+            <p><strong>Статус:</strong> {{ housing.status }}</p>
+        </div>
+
+        <div>
+            <h3>Описание</h3>
+            <p>{{ housing.description or "Описание отсутствует" }}</p>
+        </div>
+    </div>
+
+    {% if housing.status == "Доступно" %} {% if current_user.is_authenticated %}
+    <form
+        method="POST"
+        action="{{ url_for('requests.create_request', housing_id=housing.id) }}"
+        class="form request-form"
+    >
+        {% if request_form %} {{ request_form.hidden_tag() }}
+
+        <label>{{ request_form.message.label }}</label>
+        {{ request_form.message(placeholder="Например: хочу посмотреть квартиру
+        на этой неделе") }} {% for error in request_form.message.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %} {{ request_form.submit(class="btn") }} {% else %}
+        <a
+            href="{{ url_for('requests.create_request', housing_id=housing.id) }}"
+            class="btn"
+            >Оставить заявку</a
+        >
+        {% endif %}
+    </form>
+    {% else %}
+    <a
+        href="{{ url_for('auth.login', next=url_for('housing.housing_detail', housing_id=housing.id)) }}"
+        class="btn"
+    >
+        Войдите, чтобы оставить заявку
+    </a>
+    {% endif %} {% else %}
+    <button class="btn secondary" disabled>Объект недоступен</button>
+    {% endif %}
+</section>
+{% endblock %}

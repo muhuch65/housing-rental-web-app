@@ -1,0 +1,8 @@
+{% extends "base.html" %} {% block title %}Ошибка сервера{% endblock %} {% block
+content %}
+<section class="section">
+    <h1>500 — Внутренняя ошибка сервера</h1>
+    <p>Во время обработки запроса произошла ошибка.</p>
+    <a href="{{ url_for('main.index') }}" class="btn">На главную</a>
+</section>
+{% endblock %}
